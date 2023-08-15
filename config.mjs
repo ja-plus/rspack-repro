@@ -8,6 +8,8 @@ const isRunningRspack = !!process.env.RSPACK;
 if (!isRunningRspack && !isRunningWebpack) {
   throw new Error("Unknown bundler");
 }
+console.log('isRunningWebpack', isRunningWebpack)
+console.log('isRunningRspack', isRunningRspack)
 
 /**
  * @type {import('webpack').Configuration | import('@rspack/cli').Configuration}
@@ -17,6 +19,13 @@ const config = {
   devtool: false,
   entry: {
     main: "./src/index",
+  },
+  module: {
+    rules: [
+    {
+      test: /.less$/,
+      use: ['style-loader', 'css-loader', 'less-loader']
+    }]
   },
   plugins: [
     ...(isRunningWebpack ? [
@@ -35,9 +44,9 @@ const config = {
       : path.resolve(__dirname, "rspack-dist"),
     filename: "[name].js",
   },
-  experiments: {
-    css: true,
-  }
+  // experiments: {
+  //   css: true,
+  // }
 };
 
 export default config;
